@@ -48,8 +48,17 @@ def new_tab():  # Not working properly need to change.
     new_tab = Frame(notebook)
     text_area = Text(new_tab)
     text_area.pack(fill="both", expand=True)
-    notebook.add(new_tab, text="New note")
-    # notebook.select(new_tab)
+    tab_name = f"Tab {len(notebook.tabs()) + 1}"
+    notebook.add(new_tab, text=tab_name)
+    notebook.select(new_tab)
+
+def close_current_tab():
+    """Closes the currently selected tab."""
+    if len(notebook.tabs()) >= 1:
+        current_tab = notebook.select()
+        notebook.forget(current_tab)
+    else:
+        messagebox.showwarning("Warning", "Cannot close the last tab!")
                      
 menu = Menu(root)
 root.config(menu=menu)
@@ -65,7 +74,7 @@ file_menu.add_separator()
 file_menu.add_command(label="Page setup", command=function)
 file_menu.add_command(label="Print                     Ctrl+P", command=print_file)
 file_menu.add_separator()
-file_menu.add_command(label="Close tab             Ctrl+W", command=function)
+file_menu.add_command(label="Close tab             Ctrl+W", command=close_current_tab)
 file_menu.add_command(label="Close Window   Ctrl+Shift+W", command=function)
 file_menu.add_command(label="Exit", command=function)
 
