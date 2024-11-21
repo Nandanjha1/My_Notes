@@ -1,7 +1,8 @@
 # Create My Notes(like Notepad)
 
 from tkinter import *
-from tkinter import ttk,filedialog,messagebox
+from tkinter import ttk
+from tkinter import filedialog,messagebox
 import os
 import tempfile
 import win32print
@@ -14,9 +15,29 @@ root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 def function():
     print("All functions doing the same thing...")
     
+# def open_file():
+#     global name
+#     name = filedialog.askopenfilename(parent=root, initialdir=os.getcwd())
+def get_current_text_widget():
+    """Get the Text widget in the currently selected tab."""
+    current_tab = notebook.select()
+    frame = root.nametowidget(current_tab)
+    text_widget = frame.winfo_children()[0]
+    return text_widget
+
+
 def open_file():
-    global name
-    name = filedialog.askopenfilename(parent=root, initialdir=os.getcwd())
+    """Open a file and display its contents in the current tab."""
+    file_path = filedialog.askopenfilename(
+        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+    )
+    if file_path:
+        with open(file_path, "r") as file:
+            content2 = file.read()
+        content = get_current_text_widget()
+        content.delete("1.0", "end")
+        content.insert("1.0", content2)
+        notebook.tab(notebook.select(), text=file_path.split("/")[-1])
 
 def delete_text():
     text.delete("1.0", "end")
@@ -51,6 +72,16 @@ def new_tab():  # Not working properly need to change.
     tab_name = f"Tab {len(notebook.tabs()) + 1}"
     notebook.add(new_tab, text=tab_name)
     notebook.select(new_tab)
+
+# def new_tab():
+#         """Create a new tab with a text editor."""
+#         frame = ttk.Frame(notebook)
+#         text_area = Text(frame, wrap="word")
+#         text_area.pack(fill="both", expand=True, padx=2, pady=2)
+#         notebook.add(frame, text=f"Untitled {len(notebook.tabs()) + 1}")
+#         notebook.select(frame)
+
+
 
 def close_current_tab():
     """Closes the currently selected tab."""
