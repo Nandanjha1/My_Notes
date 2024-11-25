@@ -82,7 +82,6 @@ def new_tab():  # Not working properly need to change.
 #         notebook.select(frame)
 
 
-
 def close_current_tab():
     """Closes the currently selected tab."""
     if len(notebook.tabs()) >= 1:
@@ -90,24 +89,39 @@ def close_current_tab():
         notebook.forget(current_tab)
     else:
         messagebox.showwarning("Warning", "Cannot close the last tab!")
+
+def new_window():
+    pass
+
+def save_all():
+    pass
+
+def page_setup():
+    pass
+
+def close_window():
+    pass
+ 
+def exit():
+    root.destroy()
                      
 menu = Menu(root)
 root.config(menu=menu)
 file_menu = Menu(menu, tearoff=0)
 menu.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="New tab              Ctrl+N", command=new_tab)
-file_menu.add_command(label="New window      Ctrl+Shift+N", command=function)
-file_menu.add_command(label="Save all                Ctrl+Alt+S", command=function)
+file_menu.add_command(label="New window      Ctrl+Shift+N", command=new_window)
+file_menu.add_command(label="Save all                Ctrl+Alt+S", command=save_all)
 file_menu.add_command(label="Open                   Ctrl+O", command=open_file)
 file_menu.add_command(label="Save                     Ctrl+S", command=save_file)
 file_menu.add_command(label="Save as                Ctrl+Shift+S", command=save_file)
 file_menu.add_separator()
-file_menu.add_command(label="Page setup", command=function)
+file_menu.add_command(label="Page setup", command=page_setup)
 file_menu.add_command(label="Print                     Ctrl+P", command=print_file)
 file_menu.add_separator()
 file_menu.add_command(label="Close tab             Ctrl+W", command=close_current_tab)
-file_menu.add_command(label="Close Window   Ctrl+Shift+W", command=function)
-file_menu.add_command(label="Exit", command=function)
+file_menu.add_command(label="Close Window   Ctrl+Shift+W", command=close_window)
+file_menu.add_command(label="Exit", command=exit)
 
 edit_menu = Menu(menu, tearoff=0)
 menu.add_cascade(label="Edit", menu=edit_menu)
