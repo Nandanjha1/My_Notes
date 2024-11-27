@@ -91,7 +91,12 @@ def close_current_tab():
         messagebox.showwarning("Warning", "Cannot close the last tab!")
 
 def new_window():
-    pass
+    new_window = Toplevel(root)
+    new_window.title("New Window")
+    new_window.minsize(width=400, height=300)
+    
+    new_text_area = Text(new_window, wrap='word')
+    new_text_area.pack(fill="both", expand=1)
 
 def save_all():
     pass
@@ -100,7 +105,8 @@ def page_setup():
     pass
 
 def close_window():
-    pass
+    if messagebox.askyesno("Quit", "Are you sure you want to close the window?"):
+        new_window.destroy()
  
 def exit():
     root.destroy()
