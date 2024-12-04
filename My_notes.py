@@ -110,6 +110,22 @@ def close_window():
  
 def exit():
     root.destroy()
+
+def cut():
+    text.event_generate("<<Cut>>")
+
+def copy():
+    text.event_generate("<<Copy>>")
+
+def paste():
+    text.event_generate("<<Paste>>")
+
+def undo():
+    try:
+        text.edit_undo()
+    except TclError:
+        messagebox.showinfo("Undo", "Nothing to undo")
+
                      
 menu = Menu(root)
 root.config(menu=menu)
@@ -131,11 +147,11 @@ file_menu.add_command(label="Exit", command=exit)
 
 edit_menu = Menu(menu, tearoff=0)
 menu.add_cascade(label="Edit", menu=edit_menu)
-edit_menu.add_command(label="Undo                              Ctrl+Z", command=function)
+edit_menu.add_command(label="Undo                              Ctrl+Z", command=undo)
 edit_menu.add_separator()
-edit_menu.add_command(label="Copy                              Ctrl+C", command=function)
-edit_menu.add_command(label="Past                                Ctrl+V", command=function)
-edit_menu.add_command(label="Cut                                 Ctrl+X", command=function)
+edit_menu.add_command(label="Copy                              Ctrl+C", command=copy)
+edit_menu.add_command(label="Past                                Ctrl+V", command=paste)
+edit_menu.add_command(label="Cut                                 Ctrl+X", command=cut)
 edit_menu.add_command(label="Delete                            Del", command=delete_text)
 edit_menu.add_separator()
 edit_menu.add_command(label="Search with Bing         Ctrl+E", command=function)
