@@ -53,6 +53,9 @@ def save_file():
         except Exception as e:
             messagebox.showerror("Error", f"Could not save file: {e}")
 
+def save_as_file():
+    pass
+
 def print_file():
     content1 = text.get("1.0", "end-1c")
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".txt")
@@ -99,7 +102,14 @@ def new_window():
     new_text_area.pack(fill="both", expand=1)
 
 def save_all():
-    pass
+    for tab in file_path:
+        if file_path[tab] is None:
+            notebook.select(tab)
+            save_as_file()
+        else:
+            with open(file_path[tab], "w") as file:
+                file.write(tab.get("1.0", "end").strip())
+    messagebox.showinfo("Save All", "All files saved successfully.")
 
 def page_setup():
     pass
@@ -136,7 +146,7 @@ file_menu.add_command(label="New window      Ctrl+Shift+N", command=new_window)
 file_menu.add_command(label="Save all                Ctrl+Alt+S", command=save_all)
 file_menu.add_command(label="Open                   Ctrl+O", command=open_file)
 file_menu.add_command(label="Save                     Ctrl+S", command=save_file)
-file_menu.add_command(label="Save as                Ctrl+Shift+S", command=save_file)
+file_menu.add_command(label="Save as                Ctrl+Shift+S", command=save_as_file)
 file_menu.add_separator()
 file_menu.add_command(label="Page setup", command=page_setup)
 file_menu.add_command(label="Print                     Ctrl+P", command=print_file)
