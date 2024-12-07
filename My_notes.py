@@ -12,6 +12,8 @@ root.title("My Notes")
 root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 
+file_paths = {}
+
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
     current_tab = notebook.select()
@@ -27,14 +29,6 @@ def new_tab():  # Not working properly need to change.
     notebook.add(new_tab, text=tab_name)
     notebook.select(new_tab)
 
-# def new_tab():
-#         """Create a new tab with a text editor."""
-#         frame = ttk.Frame(notebook)
-#         text_area = Text(frame, wrap="word")
-#         text_area.pack(fill="both", expand=True, padx=2, pady=2)
-#         notebook.add(frame, text=f"Untitled {len(notebook.tabs()) + 1}")
-#         notebook.select(frame)
-
 def new_window():
     new_window = Toplevel(root)
     new_window.title("New Window")
@@ -44,20 +38,18 @@ def new_window():
     new_text_area.pack(fill="both", expand=1)
 
 def save_all():
-    for tab in file_path:
-        if file_path[tab] is None:
+    for tab in file_paths:
+        if file_paths[tab] is None:
             notebook.select(tab)
             save_as_file()
         else:
-            with open(file_path[tab], "w") as file:
+            with open(file_paths[tab], "w") as file:
                 file.write(tab.get("1.0", "end").strip())
     messagebox.showinfo("Save All", "All files saved successfully.")
 
 def open_file():
     """Open a file and display its contents in the current tab."""
-    file_path = filedialog.askopenfilename(
-        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
-    )
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
     if file_path:
         with open(file_path, "r") as file:
             content2 = file.read()
@@ -78,7 +70,17 @@ def save_file():
             messagebox.showerror("Error", f"Could not save file: {e}")
 
 def save_as_file():
-    pass
+    current_tab = get_current_text_widget()
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text Documents", "*.txt"), ("All Files", "*.*")],
+        )
+    if file_path:
+        with open(file_path, "w") as file:
+            file.write(current_tab.get("1.0", "end").strip())
+        file_paths[current_tab] = file_path
+        notebook.tab(current_tab, text=file_path.split("/")[-1])
+        messagebox.showinfo("Save As", f"File saved: {file_path}")
 
 def page_setup():
     pass
