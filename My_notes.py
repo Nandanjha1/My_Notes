@@ -12,62 +12,13 @@ root.title("My Notes")
 root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 
-def function():
-    print("All functions doing the same thing...")
-    
-# def open_file():
-#     global name
-#     name = filedialog.askopenfilename(parent=root, initialdir=os.getcwd())
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
     current_tab = notebook.select()
     frame = root.nametowidget(current_tab)
     text_widget = frame.winfo_children()[0]
     return text_widget
-
-
-def open_file():
-    """Open a file and display its contents in the current tab."""
-    file_path = filedialog.askopenfilename(
-        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
-    )
-    if file_path:
-        with open(file_path, "r") as file:
-            content2 = file.read()
-        content = get_current_text_widget()
-        content.delete("1.0", "end")
-        content.insert("1.0", content2)
-        notebook.tab(notebook.select(), text=file_path.split("/")[-1])
-
-def delete_text():
-    text.delete("1.0", "end")
- 
-def save_file():
-    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
-    if file_path:
-        try:
-            content = text.get("1.0", "end-1c")
-            with open(file_path, "w") as file:
-                file.write(content)
-            messagebox.showinfo("Success", "File saved successfully!")
-        except Exception as e:
-            messagebox.showerror("Error", f"Could not save file: {e}")
-
-def save_as_file():
-    pass
-
-def print_file():
-    content1 = text.get("1.0", "end-1c")
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".txt")
-    temp_file.write(content1.encode("utf-8"))
-    temp_file.close()
-    try:
-        printer_name = win32print.GetDefaultPrinter()
-        win32api.ShellExecute(0, "print", temp_file.name, None, ".", 0)
-        print(f"Content sent to printer: {printer_name}")
-    except Exception as e:
-        print(f"Error while printing: {e}")
-        
+         
 def new_tab():  # Not working properly need to change.
     new_tab = Frame(notebook)
     text_area = Text(new_tab)
@@ -83,15 +34,6 @@ def new_tab():  # Not working properly need to change.
 #         text_area.pack(fill="both", expand=True, padx=2, pady=2)
 #         notebook.add(frame, text=f"Untitled {len(notebook.tabs()) + 1}")
 #         notebook.select(frame)
-
-
-def close_current_tab():
-    """Closes the currently selected tab."""
-    if len(notebook.tabs()) >= 1:
-        current_tab = notebook.select()
-        notebook.forget(current_tab)
-    else:
-        messagebox.showwarning("Warning", "Cannot close the last tab!")
 
 def new_window():
     new_window = Toplevel(root)
@@ -111,8 +53,55 @@ def save_all():
                 file.write(tab.get("1.0", "end").strip())
     messagebox.showinfo("Save All", "All files saved successfully.")
 
+def open_file():
+    """Open a file and display its contents in the current tab."""
+    file_path = filedialog.askopenfilename(
+        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+    )
+    if file_path:
+        with open(file_path, "r") as file:
+            content2 = file.read()
+        content = get_current_text_widget()
+        content.delete("1.0", "end")
+        content.insert("1.0", content2)
+        notebook.tab(notebook.select(), text=file_path.split("/")[-1])
+
+def save_file():
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
+    if file_path:
+        try:
+            content = text.get("1.0", "end-1c")
+            with open(file_path, "w") as file:
+                file.write(content)
+            messagebox.showinfo("Success", "File saved successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not save file: {e}")
+
+def save_as_file():
+    pass
+
 def page_setup():
     pass
+
+def print_file():
+    content1 = text.get("1.0", "end-1c")
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".txt")
+    temp_file.write(content1.encode("utf-8"))
+    temp_file.close()
+    try:
+        printer_name = win32print.GetDefaultPrinter()
+        win32api.ShellExecute(0, "print", temp_file.name, None, ".", 0)
+        print(f"Content sent to printer: {printer_name}")
+    except Exception as e:
+        print(f"Error while printing: {e}")
+
+def close_current_tab():
+    """Closes the currently selected tab."""
+    if len(notebook.tabs()) >= 1:
+        current_tab = notebook.select()
+        notebook.forget(current_tab)
+    else:
+        messagebox.showwarning("Warning", "Cannot close the last tab!")
 
 def close_window():
     if messagebox.askyesno("Quit", "Are you sure you want to close the window?"):
@@ -120,6 +109,12 @@ def close_window():
  
 def exit():
     root.destroy()
+
+def undo():
+    try:
+        text.edit_undo()
+    except TclError:
+        messagebox.showinfo("Undo", "Nothing to undo")
 
 def cut():
     text.event_generate("<<Cut>>")
@@ -130,13 +125,13 @@ def copy():
 def paste():
     text.event_generate("<<Paste>>")
 
-def undo():
-    try:
-        text.edit_undo()
-    except TclError:
-        messagebox.showinfo("Undo", "Nothing to undo")
+def delete_text():
+    text.delete("1.0", "end")
 
-                     
+def function():
+    print("All functions doing the same thing...")
+
+                  
 menu = Menu(root)
 root.config(menu=menu)
 file_menu = Menu(menu, tearoff=0)
