@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog,messagebox
+from tkinter import simpledialog
 import os
 import tempfile
 import win32print
@@ -13,6 +14,9 @@ root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 
 file_paths = {}
+search_pos = 0
+text_widget = tk.Text(self, wrap='word')
+text_widget.pack(expand=True, fill='both')
 
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
@@ -131,18 +135,55 @@ def delete_text():
     text.delete("1.0", "end")
 
 def find():
-    pass
+    search_term = simpledialog.askstring("Find", "Enter the text to find:")
+    if search_term:
+        search_pos = 0
+        _search(search_term)
 
 def find_next():
-    pass
+    search_term = simpledialog.askstring("Find Next", "Enter the text to find:")
+    if search_term:
+        _search(search_term, find_next=True)
 
 def find_previous():
-    pass
+    search_term = simpledialog.askstring("Find Previous", "Enter the text to find:")
+    if search_term:
+        _search(search_term, find_previous=True)
+
+def _search(search_term, find_next=False, find_previous=False):
+    content = text_widget.get("1.0", "end-1c")
+    start_pos = search_pos
+    if find_next:
+        start_pos = text_widget.search(search_term, start_pos, stopindex="end", nocase=False)
+        if start_pos:
+            text_widget.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
+            text_widget.tag_configure("highlight", background="yellow")
+            search_pos = start_pos
+        else:
+            messagebox.showinfo("Search", "No more occurrences found.")
+    elif find_previous:
+            # Find the previous occurrence
+        start_pos = text_widget.search(search_term, start_pos, stopindex="1.0", nocase=False, backwards=True)
+        if start_pos:
+            text_widget.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
+            text_widget.tag_configure("highlight", background="yellow")
+            search_pos = start_pos
+        else:
+            messagebox.showinfo("Search", "No more occurrences found.")
+    else:
+            # Initial search (Find)
+        if search_term in content:
+            start_pos = content.find(search_term)
+            text_widget.tag_add("highlight", f"1.0 + {start_pos} chars", f"1.0 + {start_pos + len(search_term)} chars")
+            text_widget.tag_configure("highlight", background="yellow")
+            search_pos = start_pos
+        else:
+            messagebox.showinfo("Search", "No occurrences found.")
+
 
 def function():
     print("All functions doing the same thing...")
-
-                  
+                 
 menu = Menu(root)
 root.config(menu=menu)
 file_menu = Menu(menu, tearoff=0)
