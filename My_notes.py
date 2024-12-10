@@ -130,6 +130,15 @@ def paste():
 def delete_text():
     text.delete("1.0", "end")
 
+def find():
+    pass
+
+def find_next():
+    pass
+
+def find_previous():
+    pass
+
 def function():
     print("All functions doing the same thing...")
 
@@ -163,9 +172,9 @@ edit_menu.add_command(label="Delete                            Del", command=del
 edit_menu.add_separator()
 edit_menu.add_command(label="Search with Bing         Ctrl+E", command=function)
 edit_menu.add_separator()
-edit_menu.add_command(label="Find                               Ctrl+F", command=function)
-edit_menu.add_command(label="Find next                      F3", command=function)
-edit_menu.add_command(label="Find previous              Shift+F3", command=function)
+edit_menu.add_command(label="Find                               Ctrl+F", command=find)
+edit_menu.add_command(label="Find next                      F3", command=find_next)
+edit_menu.add_command(label="Find previous              Shift+F3", command=find_previous)
 edit_menu.add_command(label="Replace                        Ctrl+H", command=function)
 edit_menu.add_command(label="Go to                            Ctrl+G", command=function)
 edit_menu.add_separator()
