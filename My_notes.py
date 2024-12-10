@@ -1,9 +1,8 @@
 # Create My Notes(like Notepad)
 
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk,simpledialog
 from tkinter import filedialog,messagebox
-from tkinter import simpledialog
 import os
 import tempfile
 import win32print
@@ -12,7 +11,6 @@ root = Tk()
 root.title("My Notes")
 root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
-
 file_paths = {}
 search_pos = 0
 text_widget = tk.Text(self, wrap='word')
@@ -162,7 +160,6 @@ def _search(search_term, find_next=False, find_previous=False):
         else:
             messagebox.showinfo("Search", "No more occurrences found.")
     elif find_previous:
-            # Find the previous occurrence
         start_pos = text_widget.search(search_term, start_pos, stopindex="1.0", nocase=False, backwards=True)
         if start_pos:
             text_widget.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
@@ -171,7 +168,6 @@ def _search(search_term, find_next=False, find_previous=False):
         else:
             messagebox.showinfo("Search", "No more occurrences found.")
     else:
-            # Initial search (Find)
         if search_term in content:
             start_pos = content.find(search_term)
             text_widget.tag_add("highlight", f"1.0 + {start_pos} chars", f"1.0 + {start_pos + len(search_term)} chars")
@@ -180,6 +176,8 @@ def _search(search_term, find_next=False, find_previous=False):
         else:
             messagebox.showinfo("Search", "No occurrences found.")
 
+def search_with_bing():
+    pass
 
 def function():
     print("All functions doing the same thing...")
@@ -211,7 +209,7 @@ edit_menu.add_command(label="Past                                Ctrl+V", comman
 edit_menu.add_command(label="Cut                                 Ctrl+X", command=cut)
 edit_menu.add_command(label="Delete                            Del", command=delete_text)
 edit_menu.add_separator()
-edit_menu.add_command(label="Search with Bing         Ctrl+E", command=function)
+edit_menu.add_command(label="Search with Bing         Ctrl+E", command=search_with_bing)
 edit_menu.add_separator()
 edit_menu.add_command(label="Find                               Ctrl+F", command=find)
 edit_menu.add_command(label="Find next                      F3", command=find_next)
