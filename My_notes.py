@@ -14,10 +14,6 @@ root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 file_paths = {}
 search_pos = 0
-text_widget = Text(wrap='word')
-text_widget.pack(expand=True, fill='both')
-search_entry = Entry(root, width=40)
-search_entry.pack(pady=5)
 
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
@@ -152,35 +148,35 @@ def find_previous():
         _search(search_term, find_previous=True)
 
 def _search(search_term, find_next=False, find_previous=False):
-    content = text_widget.get("1.0", "end-1c")
+    content = text.get("1.0", "end-1c")
     start_pos = search_pos
     if find_next:
-        start_pos = text_widget.search(search_term, start_pos, stopindex="end", nocase=False)
+        start_pos = text.search(search_term, start_pos, stopindex="end", nocase=False)
         if start_pos:
-            text_widget.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
-            text_widget.tag_configure("highlight", background="yellow")
+            text.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
+            text.tag_configure("highlight", background="yellow")
             search_pos = start_pos
         else:
             messagebox.showinfo("Search", "No more occurrences found.")
     elif find_previous:
-        start_pos = text_widget.search(search_term, start_pos, stopindex="1.0", nocase=False, backwards=True)
+        start_pos = text.search(search_term, start_pos, stopindex="1.0", nocase=False, backwards=True)
         if start_pos:
-            text_widget.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
-            text_widget.tag_configure("highlight", background="yellow")
+            text.tag_add("highlight", start_pos, f"{start_pos}+{len(search_term)}c")
+            text.tag_configure("highlight", background="yellow")
             search_pos = start_pos
         else:
             messagebox.showinfo("Search", "No more occurrences found.")
     else:
         if search_term in content:
             start_pos = content.find(search_term)
-            text_widget.tag_add("highlight", f"1.0 + {start_pos} chars", f"1.0 + {start_pos + len(search_term)} chars")
-            text_widget.tag_configure("highlight", background="yellow")
+            text.tag_add("highlight", f"1.0 + {start_pos} chars", f"1.0 + {start_pos + len(search_term)} chars")
+            text.tag_configure("highlight", background="yellow")
             search_pos = start_pos
         else:
             messagebox.showinfo("Search", "No occurrences found.")
 
 def search_with_bing():
-    query = search_entry.get()
+    query = text.get()
     if query.strip():
         url = f"https://www.bing.com/search?q={query}"
         webbrowser.open(url)
@@ -188,18 +184,47 @@ def search_with_bing():
         messagebox.showwarning("Input Error", "Please enter a search term.")
 
 def replace():
-    original = original_entry.get()
-    replacement = replacement_entry.get()
-    text_content = text.get("1.0", "end")
+    find_label.pack(pady=5)
+    find_entry.pack(pady=5)
+    replace_label.pack(pady=5)
+    replace_entry.pack(pady=5)
+    replace_button.pack(pady=5)
+    replace_all_button.pack(pady=5)
 
-    if original.strip() and replacement.strip():
-        new_text = text_content.replace(original, replacement)
+def replace_text():
+    find_text = find_entry.get()
+    replace_text = replace_entry.get()
+    content = text.get("1.0", "end")
+
+    if find_text.strip():
+        new_content = content.replace(find_text, replace_text, 1)
         text.delete("1.0", "end")
-        text.insert("end", new_text)
-        messagebox.showinfo("Success", "Text replaced successfully!")
+        text.insert("end", new_content)
+        messagebox.showinfo("Success", f"Replaced the first occurrence of '{find_text}' with '{replace_text}'.")
     else:
-        messagebox.showwarning("Input Error", "Please provide both the original and replacement text.")
+        messagebox.showwarning("Input Error", "Please enter text to find and replace.")
 
+def replace_all_text():
+    find_text = find_entry.get()
+    replace_text = replace_entry.get()
+    content = text.get("1.0", "end")
+
+    if find_text.strip():
+        new_content = content.replace(find_text, replace_text)
+        text.delete("1.0", "end")
+        text.insert("end", new_content)
+        messagebox.showinfo("Success", f"Replaced all occurrences of '{find_text}' with '{replace_text}'.")
+    else:
+        messagebox.showwarning("Input Error", "Please enter text to find and replace.")
+
+find_label = Label(root, text="Find Text:")
+find_entry = Entry(root, width=40)
+
+replace_label = Label(root, text="Replace With:")
+replace_entry = Entry(root, width=40)
+
+replace_button = Button(root, text="Replace", command=replace_text)
+replace_all_button = Button(root, text="Replace All", command=replace_all_text)
 
 def function():
     print("All functions doing the same thing...")
@@ -252,16 +277,5 @@ text = Text(root)
 text.pack(fill="both", expand=True)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
-
-label1 = Label(root, text="Original text:")
-label1.pack(pady=5)
-original_entry = Entry(root, width=40)
-original_entry.pack(pady=5)
-
-label2 = Label(root, text="Replacement text:")
-label2.pack(pady=10)
-replacement_entry = Entry(root, width=40)
-replacement_entry.pack(pady=10)
-
 
 root.mainloop()
