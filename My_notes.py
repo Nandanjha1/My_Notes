@@ -187,6 +187,20 @@ def search_with_bing():
     else:
         messagebox.showwarning("Input Error", "Please enter a search term.")
 
+def replace():
+    original = original_entry.get()
+    replacement = replacement_entry.get()
+    text_content = text.get("1.0", "end")
+
+    if original.strip() and replacement.strip():
+        new_text = text_content.replace(original, replacement)
+        text.delete("1.0", "end")
+        text.insert("end", new_text)
+        messagebox.showinfo("Success", "Text replaced successfully!")
+    else:
+        messagebox.showwarning("Input Error", "Please provide both the original and replacement text.")
+
+
 def function():
     print("All functions doing the same thing...")
                  
@@ -222,7 +236,7 @@ edit_menu.add_separator()
 edit_menu.add_command(label="Find                               Ctrl+F", command=find)
 edit_menu.add_command(label="Find next                      F3", command=find_next)
 edit_menu.add_command(label="Find previous              Shift+F3", command=find_previous)
-edit_menu.add_command(label="Replace                        Ctrl+H", command=function)
+edit_menu.add_command(label="Replace                        Ctrl+H", command=replace)
 edit_menu.add_command(label="Go to                            Ctrl+G", command=function)
 edit_menu.add_separator()
 edit_menu.add_command(label="Font", command=function)
@@ -238,5 +252,16 @@ text = Text(root)
 text.pack(fill="both", expand=True)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
+
+label1 = Label(root, text="Original text:")
+label1.pack(pady=5)
+original_entry = Entry(root, width=40)
+original_entry.pack(pady=5)
+
+label2 = Label(root, text="Replacement text:")
+label2.pack(pady=10)
+replacement_entry = Entry(root, width=40)
+replacement_entry.pack(pady=10)
+
 
 root.mainloop()
