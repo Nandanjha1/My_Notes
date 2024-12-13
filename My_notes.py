@@ -7,14 +7,17 @@ import os
 import tempfile
 import win32print
 import win32api
+import webbrowser
 root = Tk()
 root.title("My Notes")
 root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 file_paths = {}
 search_pos = 0
-text_widget = tk.Text(self, wrap='word')
+text_widget = Text(wrap='word')
 text_widget.pack(expand=True, fill='both')
+search_entry = Entry(root, width=40)
+search_entry.pack(pady=5)
 
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
@@ -177,7 +180,12 @@ def _search(search_term, find_next=False, find_previous=False):
             messagebox.showinfo("Search", "No occurrences found.")
 
 def search_with_bing():
-    pass
+    query = search_entry.get()
+    if query.strip():
+        url = f"https://www.bing.com/search?q={query}"
+        webbrowser.open(url)
+    else:
+        messagebox.showwarning("Input Error", "Please enter a search term.")
 
 def function():
     print("All functions doing the same thing...")
