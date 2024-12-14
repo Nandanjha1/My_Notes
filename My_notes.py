@@ -230,6 +230,29 @@ def replace():
     Button(replace_dialog, text="Replace", command=replace).grid(row=2, column=0, padx=5, pady=5)
     Button(replace_dialog, text="Replace All", command=replace_all).grid(row=2, column=1, padx=5, pady=5)
     
+def go_to_line():
+    def go_to():
+        try:
+            line_number = int(line_entry.get())
+            text.mark_set("insert", f"{line_number}.0")
+            text.see(f"{line_number}.0")
+            go_to_window.destroy()
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Please enter a valid line number.")
+
+    go_to_window = Toplevel(root)
+    go_to_window.title("Go To Line")
+    go_to_window.geometry("300x100")
+    go_to_window.resizable(False, False)
+
+    Label(go_to_window, text="Enter Line Number:").pack(pady=5)
+        
+    line_entry = Entry(go_to_window)
+    line_entry.pack(pady=5)
+
+    go_to_button = Button(go_to_window, text="Go To Line", command=go_to)
+    go_to_button.pack(pady=5)
+
 def function():
     print("All functions doing the same thing...")
                  
@@ -266,7 +289,7 @@ edit_menu.add_command(label="Find                               Ctrl+F", command
 edit_menu.add_command(label="Find next                      F3", command=find_next)
 edit_menu.add_command(label="Find previous              Shift+F3", command=find_previous)
 edit_menu.add_command(label="Replace                        Ctrl+H", command=replace)
-edit_menu.add_command(label="Go to                            Ctrl+G", command=function)
+edit_menu.add_command(label="Go to                            Ctrl+G", command=go_to_line)
 edit_menu.add_separator()
 edit_menu.add_command(label="Font", command=function)
 
