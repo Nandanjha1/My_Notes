@@ -253,8 +253,23 @@ def go_to_line():
     go_to_button = Button(go_to_window, text="Go To Line", command=go_to)
     go_to_button.pack(pady=5)
 
-def function():
+def font():
     print("All functions doing the same thing...")
+    
+def status_bar():
+    pass
+
+def word_wrap():
+    pass
+
+def zoom_in():
+    pass
+
+def zoom_out():
+    pass
+
+def time_date():
+    pass
                  
 menu = Menu(root)
 root.config(menu=menu)
@@ -291,14 +306,15 @@ edit_menu.add_command(label="Find previous              Shift+F3", command=find_
 edit_menu.add_command(label="Replace                        Ctrl+H", command=replace)
 edit_menu.add_command(label="Go to                            Ctrl+G", command=go_to_line)
 edit_menu.add_separator()
-edit_menu.add_command(label="Font", command=function)
+edit_menu.add_command(label="Font", command=font)
 
 view_menu = Menu(menu, tearoff=0)
 menu.add_cascade(label="View", menu=view_menu)
-view_menu.add_command(label="Status bar    ", command=function)
-view_menu.add_command(label="Word wrap    ", command=function)
-view_menu.add_command(label="Zoom in          ctrl+plus", command=function)
-view_menu.add_command(label="Zoom out        ctrl+minus", command=function)
+view_menu.add_command(label="Status bar    ", command=status_bar)
+view_menu.add_command(label="Word wrap    ", command=word_wrap)
+view_menu.add_command(label="Zoom in          ctrl+plus", command=zoom_in)
+view_menu.add_command(label="Zoom out        ctrl+minus", command=zoom_out)
+view_menu.add_command(label="Time/Date        F5", command=time_date)
 
 text = Text(root)
 text.pack(fill="both", expand=True)
