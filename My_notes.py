@@ -183,49 +183,53 @@ def search_with_bing():
     else:
         messagebox.showwarning("Input Error", "Please enter a search term.")
 
+def replace_text(find_text, replace_text, replace_all):
+    text_content = text.get("1.0", "end")
+    
+    if find_text not in text_content:
+        messagebox.showinfo("Info", "Text not found!")
+        return
+
+    if replace_all:
+        text_content = text_content.replace(find_text, replace_text)
+        text.delete("1.0", "end")
+        text.insert("1.0", text_content)
+        messagebox.showinfo("Success", "All occurrences replaced!")
+    else:
+        start_index = text.search(find_text, "1.0", "end")
+        if start_index:
+            end_index = f"{start_index}+{len(find_text)}c"
+            text.delete(start_index, end_index)
+            text.insert(start_index, replace_text)
+            messagebox.showinfo("Success", "First occurrence replaced!")
+        else:
+            messagebox.showinfo("Info", "Text not found!")
+
 def replace():
-    find_label.pack(pady=5)
-    find_entry.pack(pady=5)
-    replace_label.pack(pady=5)
-    replace_entry.pack(pady=5)
-    replace_button.pack(pady=5)
-    replace_all_button.pack(pady=5)
+    replace_dialog = Toplevel(root)
+    replace_dialog.title("Replace")
 
-def replace_text():
-    find_text = find_entry.get()
-    replace_text = replace_entry.get()
-    content = text.get("1.0", "end")
+    Label(replace_dialog, text="Find: ").grid(row=0, column=0, padx=5, pady=5)
+    find_entry = Entry(replace_dialog, width=30)
+    find_entry.grid(row=0, column=1, padx=5, pady=5)
 
-    if find_text.strip():
-        new_content = content.replace(find_text, replace_text, 1)
-        text.delete("1.0", "end")
-        text.insert("end", new_content)
-        messagebox.showinfo("Success", f"Replaced the first occurrence of '{find_text}' with '{replace_text}'.")
-    else:
-        messagebox.showwarning("Input Error", "Please enter text to find and replace.")
+    Label(replace_dialog, text="Replace: ").grid(row=1, column=0, padx=5, pady=5)
+    replace_entry = Entry(replace_dialog, width=30)
+    replace_entry.grid(row=1, column=1, padx=5, pady=5)
 
-def replace_all_text():
-    find_text = find_entry.get()
-    replace_text = replace_entry.get()
-    content = text.get("1.0", "end")
+    def replace():
+        find_text = find_entry.get()
+        replace_text_value = replace_entry.get()
+        replace_text(find_text, replace_text_value, replace_all=False)
 
-    if find_text.strip():
-        new_content = content.replace(find_text, replace_text)
-        text.delete("1.0", "end")
-        text.insert("end", new_content)
-        messagebox.showinfo("Success", f"Replaced all occurrences of '{find_text}' with '{replace_text}'.")
-    else:
-        messagebox.showwarning("Input Error", "Please enter text to find and replace.")
+    def replace_all():
+        find_text = find_entry.get()
+        replace_text_value = replace_entry.get()
+        replace_text(find_text, replace_text_value, replace_all=True)
 
-find_label = Label(root, text="Find Text:")
-find_entry = Entry(root, width=40)
-
-replace_label = Label(root, text="Replace With:")
-replace_entry = Entry(root, width=40)
-
-replace_button = Button(root, text="Replace", command=replace_text)
-replace_all_button = Button(root, text="Replace All", command=replace_all_text)
-
+    Button(replace_dialog, text="Replace", command=replace).grid(row=2, column=0, padx=5, pady=5)
+    Button(replace_dialog, text="Replace All", command=replace_all).grid(row=2, column=1, padx=5, pady=5)
+    
 def function():
     print("All functions doing the same thing...")
                  
