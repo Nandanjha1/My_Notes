@@ -15,6 +15,7 @@ root.minsize(width=400, height=300)
 root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 file_paths = {}
 search_pos = 0
+font_size = 12
 
 def get_current_text_widget():
     """Get the Text widget in the currently selected tab."""
@@ -270,13 +271,17 @@ def word_wrap():
     pass
 
 def zoom_in():
-    pass
+    font_size += 2
+    text.config(font=("Arial", font_size))
 
 def zoom_out():
-    pass
+    if font_size > 8:
+        font_size -= 2
+        text.config(font=("Arial", font_size))
 
 def time_date():
-    pass
+    current_time_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    text.insert(INSERT, current_time_date)
                  
 menu = Menu(root)
 root.config(menu=menu)
@@ -328,5 +333,6 @@ text = Text(root, wrap="word", undo=True)
 text.pack(fill="both", expand=True)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
+text.config(font=("Arial", font_size))
 
 root.mainloop()
