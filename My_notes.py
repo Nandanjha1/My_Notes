@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import ttk,simpledialog
 from tkinter import filedialog,messagebox
+from datetime import datetime
 import os
 import tempfile
 import win32print
@@ -119,6 +120,12 @@ def undo():
     except TclError:
         messagebox.showinfo("Undo", "Nothing to undo")
 
+def redo():
+    try:
+        text.edit_redo()
+    except TclError:
+        messagebox.showinfo("Redo", "Nothing to redo.")
+        
 def cut():
     text.event_generate("<<Cut>>")
 
@@ -292,6 +299,7 @@ file_menu.add_command(label="Exit", command=exit)
 edit_menu = Menu(menu, tearoff=0)
 menu.add_cascade(label="Edit", menu=edit_menu)
 edit_menu.add_command(label="Undo                              Ctrl+Z", command=undo)
+edit_menu.add_command(label="Redo                              Ctrl+Shift+Z", command=redo)
 edit_menu.add_separator()
 edit_menu.add_command(label="Copy                              Ctrl+C", command=copy)
 edit_menu.add_command(label="Past                                Ctrl+V", command=paste)
@@ -316,7 +324,7 @@ view_menu.add_command(label="Zoom in          ctrl+plus", command=zoom_in)
 view_menu.add_command(label="Zoom out        ctrl+minus", command=zoom_out)
 view_menu.add_command(label="Time/Date        F5", command=time_date)
 
-text = Text(root)
+text = Text(root, wrap="word", undo=True)
 text.pack(fill="both", expand=True)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
