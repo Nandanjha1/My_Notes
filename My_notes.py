@@ -1,8 +1,8 @@
 # Create My Notes(like Notepad)
 
 from tkinter import *
-from tkinter import ttk,simpledialog
-from tkinter import filedialog,messagebox
+from tkinter import ttk, simpledialog, Scrollbar
+from tkinter import filedialog, messagebox
 from datetime import datetime
 import os
 import tempfile
@@ -16,9 +16,20 @@ root.iconbitmap("C:/Users/navin/OneDrive/Desktop/Logo/icon.ico")
 file_paths = {}
 search_pos = 0
 font_size = 12
+text = Text(root, wrap="word", undo=True)
+text.pack(fill="both", expand=True)
+
+notebook = ttk.Notebook(root)
+notebook.pack(fill="both", expand=True)
+
+text.config(font=("Arial", font_size))
+
+# scrollbar = Scrollbar(text)
+# scrollbar.pack(side="right", fill="y")
+# text.config(yscrollcommand=scrollbar.set)
+# scrollbar.config(command=text.yview)
 
 def get_current_text_widget():
-    """Get the Text widget in the currently selected tab."""
     current_tab = notebook.select()
     frame = root.nametowidget(current_tab)
     text_widget = frame.winfo_children()[0]
@@ -51,7 +62,6 @@ def save_all():
     messagebox.showinfo("Save All", "All files saved successfully.")
 
 def open_file():
-    """Open a file and display its contents in the current tab."""
     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
     if file_path:
         with open(file_path, "r") as file:
@@ -101,7 +111,6 @@ def print_file():
         print(f"Error while printing: {e}")
 
 def close_current_tab():
-    """Closes the currently selected tab."""
     if len(notebook.tabs()) >= 1:
         current_tab = notebook.select()
         notebook.forget(current_tab)
@@ -280,7 +289,7 @@ def zoom_out():
         text.config(font=("Arial", font_size))
 
 def time_date():
-    current_time_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    current_time_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     text.insert(INSERT, current_time_date)
                  
 menu = Menu(root)
@@ -328,11 +337,5 @@ view_menu.add_command(label="Word wrap    ", command=word_wrap)
 view_menu.add_command(label="Zoom in          ctrl+plus", command=zoom_in)
 view_menu.add_command(label="Zoom out        ctrl+minus", command=zoom_out)
 view_menu.add_command(label="Time/Date        F5", command=time_date)
-
-text = Text(root, wrap="word", undo=True)
-text.pack(fill="both", expand=True)
-notebook = ttk.Notebook(root)
-notebook.pack(fill="both", expand=True)
-text.config(font=("Arial", font_size))
 
 root.mainloop()
