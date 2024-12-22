@@ -122,7 +122,8 @@ def close_window():
         new_window.destroy()
  
 def exit():
-    root.destroy()
+    if messagebox.askokcancel("Exit", "Are you sure you want to exit?"):
+        root.destroy()
 
 def undo():
     try:
@@ -135,15 +136,6 @@ def redo():
         text.edit_redo()
     except TclError:
         messagebox.showinfo("Redo", "Nothing to redo.")
-        
-def cut():
-    text.event_generate("<<Cut>>")
-
-def copy():
-    text.event_generate("<<Copy>>")
-
-def paste():
-    text.event_generate("<<Paste>>")
 
 def delete_text():
     text.delete("1.0", "end")
@@ -273,11 +265,19 @@ def go_to_line():
 def font():
     print("All functions doing the same thing...")
     
-def status_bar():
-    pass
+def status_bar(event=None):
+    line, column = text.index(INSERT).split(".")
+    status_bar.config(text=f"Line: {line} | Column: {column}")
 
 def word_wrap():
-    pass
+    global word_wrap
+    word_wrap = not word_wrap
+    if word_wrap:
+        text.config(wrap=WORD)
+        word_wrap.config(text="Word Wrap: On")
+    else:
+        text.config(wrap=NONE)
+        word_wrap.config(text="Word Wrap: Off")
 
 def zoom_in():
     font_size += 2
@@ -315,9 +315,9 @@ menu.add_cascade(label="Edit", menu=edit_menu)
 edit_menu.add_command(label="Undo                              Ctrl+Z", command=undo)
 edit_menu.add_command(label="Redo                              Ctrl+Shift+Z", command=redo)
 edit_menu.add_separator()
-edit_menu.add_command(label="Copy                              Ctrl+C", command=copy)
-edit_menu.add_command(label="Past                                Ctrl+V", command=paste)
-edit_menu.add_command(label="Cut                                 Ctrl+X", command=cut)
+edit_menu.add_command(label="Copy                              Ctrl+C", command=lambda: root.focus_get().event_generate('<<Copy>>'))
+edit_menu.add_command(label="Paste                              Ctrl+V", command=lambda: root.focus_get().event_generate('<<Paste>>'))
+edit_menu.add_command(label="Cut                                 Ctrl+X", command=lambda: root.focus_get().event_generate('<<Cut>>'))
 edit_menu.add_command(label="Delete                            Del", command=delete_text)
 edit_menu.add_separator()
 edit_menu.add_command(label="Search with Bing         Ctrl+E", command=search_with_bing)
